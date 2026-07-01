@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
 <title>Buona Casa — עצב את הבית שלך לפני הקנייה</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -174,10 +174,11 @@ input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;}
 .item.sel .item-del{display:flex;}
 .item-resize{position:absolute;bottom:-7px;left:-7px;width:16px;height:16px;border-radius:50%;background:var(--white);border:2px solid var(--accent);cursor:se-resize;display:none;box-shadow:0 1px 4px rgba(0,0,0,.2);z-index:10;}
 .item.sel .item-resize{display:block;}
-.item-rot-l,.item-rot-r{position:absolute;bottom:-14px;width:22px;height:22px;border-radius:50%;border:none;background:var(--white);color:var(--ink);font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.2);z-index:10;touch-action:manipulation;padding:0;line-height:1;border:1.5px solid var(--border);}
-.item-rot-l{right:28px;}
-.item-rot-r{right:2px;}
-.item.sel .item-rot-l,.item.sel .item-rot-r{display:flex;}
+.item-rot-l,.item-rot-r,.item-flip{position:absolute;bottom:-14px;width:22px;height:22px;border-radius:50%;border:none;background:var(--white);color:var(--ink);font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.2);z-index:10;touch-action:manipulation;padding:0;line-height:1;border:1.5px solid var(--border);}
+.item-rot-l{right:54px;}
+.item-rot-r{right:28px;}
+.item-flip{right:2px;font-size:11px;}
+.item.sel .item-rot-l,.item.sel .item-rot-r,.item.sel .item-flip{display:flex;}
 .item-pinch{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--accent);white-space:nowrap;display:none;background:rgba(255,255,255,.88);padding:1px 7px;border-radius:10px;pointer-events:none;}
 .item.sel .item-pinch{display:block;}
 
@@ -391,72 +392,94 @@ input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;}
 <script>
 const CDN = '/images/';
 
+// מידות אמיתיות: 3px = 1cm (חדר ~300cm רוחב = ~900px)
 const PRODUCTS = [
-  {id:"p1",sid:"9211464319231",name:"פח Calabria 33L לבן",price:479,img:CDN+"WhiteTrashCan33L.webp",cat:"פחי אשפה",w:88,h:128},
-  {id:"p2",sid:"9211464548607",name:"פח Calabria 33L שחור",price:479,img:CDN+"Design1600x1600.png",cat:"פחי אשפה",w:88,h:128},
-  {id:"p3",sid:"9211464614143",name:"פח Calabria 33L Stone",price:479,img:CDN+"KitchenTrashCan33L.webp",cat:"פחי אשפה",w:88,h:128},
-  {id:"p4",sid:"9211464745215",name:"פח Calabria 33L Space Gray",price:479,img:CDN+"3_04274940-b6bf-4c4f-b499-14da97d19f35.png",cat:"פחי אשפה",w:88,h:128},
-  {id:"p5",sid:"9211466678527",name:"פח Calabria 33L Urban Gray",price:479,img:CDN+"6_c31c91ad-64ce-4d5d-bdf9-651f5b0e5754.png",cat:"פחי אשפה",w:88,h:128},
-  {id:"p6",sid:"9211466744063",name:"פח Calabria 33L Taupe Pink",price:479,img:CDN+"4_ec661b1f-2827-48d0-8576-dbefc478140a.png",cat:"פחי אשפה",w:88,h:128},
-  {id:"p7",sid:"9211466776831",name:"פח Calabria 33L ירוק מרווה",price:479,img:CDN+"5_7b29bcec-8db8-40a3-8475-66972e8baff1.png",cat:"פחי אשפה",w:88,h:128},
-  {id:"p8",sid:"9211466907903",name:"פח Calabria 53L Dark Gray",price:599,img:CDN+"DarkGrayLegs.webp",cat:"פחי אשפה",w:100,h:152},
-  {id:"p9",sid:"9211466940671",name:"פח Calabria 53L Taupe Pink",price:599,img:CDN+"1_ad56761e-fc4a-46d2-a430-943d12fc61f4.png",cat:"פחי אשפה",w:100,h:152},
-  {id:"p10",sid:"9211466645759",name:"פח Calabria 53L Urban Gray",price:599,img:CDN+"3_7c8f74cf-0c37-4375-957b-2c61262e33c4.png",cat:"פחי אשפה",w:100,h:152},
-  {id:"p11",sid:"9211465203967",name:"פח SMART חיישן 50L לבן",price:649,img:CDN+"SmartSensorTrashCan50LWhite.webp",cat:"פחי אשפה",w:96,h:145},
-  {id:"p12",sid:"9211465269503",name:"פח SMART חיישן 50L שחור",price:649,img:CDN+"77e3744c450e8391c5b5ccb50e60957f.webp",cat:"פחי אשפה",w:96,h:145},
-  {id:"p13",sid:"9211464057087",name:"סט סירים OXFORD Pink",price:397,img:CDN+"5PieceSetPink.webp",cat:"סירים",w:145,h:100},
-  {id:"p14",sid:"9211464122623",name:"סט סירים OXFORD ירוק",price:397,img:CDN+"MintColor5PieceSet.webp",cat:"סירים",w:145,h:100},
-  {id:"p15",sid:"9211464155391",name:"סט סירים OXFORD Dark Gray",price:397,img:CDN+"5PieceSetDarkGray.webp",cat:"סירים",w:145,h:100},
-  {id:"p16",sid:"9211464220927",name:"סט סירים OXFORD תכלת",price:397,img:CDN+"5PieceSetTeal.webp",cat:"סירים",w:145,h:100},
-  {id:"p17",sid:"9211464909055",name:"סט סירים LUXEMBOURG 8 חלקים",price:974,img:CDN+"Luxembourg_8_Piece_Set.webp",cat:"סירים",w:160,h:110},
-  {id:"p18",sid:"9211464974591",name:"סט סירים BERLIN 10 חלקים",price:1049,img:CDN+"BerlinCookwareSet10Pieces.webp",cat:"סירים",w:180,h:120},
-  {id:"p19",sid:"9211469496575",name:"סט סירים Oxford Sage Green",price:337,img:CDN+"Oxford_Sage_Green_Set.webp",cat:"סירים",w:145,h:100},
-  {id:"p20",sid:"9211469562111",name:"סט סירים Oxford Almond Rose",price:359,img:CDN+"Oxford_Almond_Rose_Set.webp",cat:"סירים",w:145,h:100},
-  {id:"p21",sid:"9211468251391",name:"סוטאז' Crown Stone 28 ס״מ",price:307,img:CDN+"Sotage36cmCrownStone.webp",cat:"סירים",w:140,h:110},
-  {id:"p22",sid:"9211468284159",name:"סוטאז' Crown Marsala 28 ס״מ",price:307,img:CDN+"Sotage36cmMarsala.webp",cat:"סירים",w:140,h:110},
-  {id:"p23",sid:"9211468316927",name:"סוטאז' Crown Slate Blue 28 ס״מ",price:307,img:CDN+"SotageBlue28cm.webp",cat:"סירים",w:140,h:110},
-  {id:"p24",sid:"9211467071743",name:"מחבת FluffyPan ורוד",price:147,img:CDN+"PinkPancakePan_1.webp",cat:"מטבח",w:120,h:100},
-  {id:"p25",sid:"9211467137279",name:"מחבת FluffyPan ירוק מרווה",price:147,img:CDN+"FluffyPanSageGreen.webp",cat:"מטבח",w:120,h:100},
-  {id:"p26",sid:"9211467170047",name:"מחבת FluffyPan Stone",price:147,img:CDN+"PancakeStonePan.webp",cat:"מטבח",w:120,h:100},
-  {id:"p27",sid:"9211465367807",name:"מתקן ייבוש כלים מתקפל",price:249,img:CDN+"FoldableDishDryingRack.webp",cat:"מטבח",w:148,h:108},
-  {id:"p28",sid:"9211466121471",name:"מנורה דקורטיבית בוהו",price:399,img:CDN+"DecorativeWoodLamp.webp",cat:"עיצוב הבית",w:78,h:162},
-  {id:"p29",sid:"9211466154239",name:"מנורת לילה דקורטיבית",price:129,img:CDN+"DecorativeNightLamp.webp",cat:"עיצוב הבית",w:68,h:118},
-  {id:"p30",sid:"9211468054783",name:"מגש שיש מלבני ידיות זהב",price:187,img:CDN+"RectangularTraywithGoldHandles_1.webp",cat:"עיצוב הבית",w:130,h:80},
-  {id:"p31",sid:"9211468153087",name:"מגש שיש מסתובב 360°",price:254,img:CDN+"RotatingMarbleTray360.webp",cat:"עיצוב הבית",w:110,h:90},
-  {id:"p32",sid:"9211466219775",name:"זוג מדפים דקורטיביים",price:229,img:CDN+"Decorative_Shelf_Pair.webp",cat:"אחסון",w:128,h:88},
-  {id:"p33",sid:"9211466055935",name:"יחידת מדפים 4 קומות",price:319,img:CDN+"4-TierShelvingUnit.png",cat:"אחסון",w:98,h:200},
-  {id:"p34",sid:"9211465990399",name:"יחידת מדפים פינתית",price:229,img:CDN+"CornerShelfUnit_3.webp",cat:"אחסון",w:110,h:160},
-  {id:"p35",sid:"9211466252543",name:"שולחן צד עם מגש",price:269,img:CDN+"SideTablewithTray.webp",cat:"אחסון",w:120,h:130},
-  {id:"p36",sid:"9211467792639",name:"עגלת אחסון במבוק 3 קומות",price:479,img:CDN+"1_7269730f-9ec2-4c2b-a5db-263990ea9128.png",cat:"אחסון",w:110,h:160},
-  {id:"p37",sid:"9211467825407",name:"עגלת מטבח במבוק",price:769,img:CDN+"2_a529d771-3676-460d-8fc1-50de74b3b4d6.png",cat:"אחסון",w:120,h:160},
-  {id:"p38",sid:"9211465924863",name:"מתקן כביסה Superior",price:399,img:CDN+"SuperiorLaundryRack.webp",cat:"כביסה",w:138,h:160},
-  {id:"p39",sid:"9211465793791",name:"מתקן כביסה Casaflex Ultra",price:529,img:CDN+"CasaflexUltraWhiteClothesRack.webp",cat:"כביסה",w:148,h:158},
-  // שטיחים
-  {id:"r1",sid:"9221431460095",name:"שטיח Retro Grid",price:710,img:CDN+"Retro_Grid_600x600_dcd0a05f-3b8b-4db6-8709-ec5f5a60484f.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r2",sid:"9221440405759",name:"שטיח Dusty Nude Deluxe",price:410,img:CDN+"DustyNudeRug.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r3",sid:"9221440438527",name:"שטיח Forest Shadow Deluxe",price:410,img:CDN+"Forest_Shadow_Deluxe.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r4",sid:"9221440471295",name:"שטיח Rosetta Mist Deluxe",price:410,img:CDN+"RosettaMistRug.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r5",sid:"9221440504063",name:"שטיח Desert Royal Deluxe",price:410,img:CDN+"DesertRoyalRug.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r6",sid:"9221440536831",name:"שטיח Terra Red Deluxe",price:410,img:CDN+"TERRAREDRug.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r7",sid:"9221440569599",name:"שטיח Persian Garden Deluxe",price:410,img:CDN+"PersianGared.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r8",sid:"9221440602367",name:"שטיח Amber Night Deluxe",price:410,img:CDN+"AmberNight.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r9",sid:"9221440667903",name:"שטיח ילדים Looma Dots",price:410,img:CDN+"LoomaDotsDeluxeRug.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r10",sid:"9221440700671",name:"שטיח ילדים Tiny Travelers",price:410,img:CDN+"TinyTravelersDeluxe.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r11",sid:"9223531921663",name:"שטיח Venice אפור",price:349,img:CDN+"VeniceGrayRug.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r12",sid:"9223531954431",name:"שטיח Venice בז׳",price:349,img:CDN+"VeniceBeigeRug_2.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r13",sid:"9223531987199",name:"שטיח Baku Ivory",price:349,img:CDN+"Baku_Ivory_2.1.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r14",sid:"9223532019967",name:"שטיח Baku חום",price:349,img:CDN+"BakuSand2.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r15",sid:"9223532052735",name:"שטיח Kashan Blue",price:349,img:CDN+"KashanBlue5.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r16",sid:"9223532085503",name:"שטיח Kashan Gray",price:349,img:CDN+"KashanGray.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r17",sid:"9223532118271",name:"שטיח Damascus Deluxe",price:410,img:CDN+"1_e641b598-d46d-4617-9200-c3d9da397194.png",cat:"שטיחים",w:200,h:160},
-  {id:"r18",sid:"9223532151039",name:"שטיח Antique Torino",price:349,img:CDN+"AntiqueTorino4.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r19",sid:"9223532183807",name:"שטיח Royal Isfahan",price:349,img:CDN+"ImagefromBuonaCasa_3.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r20",sid:"9223532249343",name:"שטיח Marble Beige",price:349,img:CDN+"MarbleBeige4.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r21",sid:"9223532282111",name:"שטיח Marble Gray",price:349,img:CDN+"MarbleGray1.1.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r22",sid:"9223532314879",name:"שטיח Marrakesh",price:349,img:CDN+"ImagefromBuonaCasa.webp",cat:"שטיחים",w:200,h:160},
-  {id:"r23",sid:"9307913224447",name:"שטיח Shiraz Deluxe",price:410,img:CDN+"7_1d52645c-8a65-4a22-86c8-8d5ac755c98f.png",cat:"שטיחים",w:200,h:160},
-  {id:"r24",sid:"9394137235711",name:"שטיח Damka Canvas",price:410,img:CDN+"1_b283c4ce-ebd1-49d3-b1b2-988c325dfe45.png",cat:"שטיחים",w:200,h:160},
-  {id:"r25",sid:"9394144248063",name:"שטיח Jaffa Canvas",price:410,img:CDN+"2_b2b57d77-4e38-44aa-ba83-249d2151dc13.png",cat:"שטיחים",w:200,h:160},
+  // פח Calabria 33L: גובה 64cm, רוחב 28.5cm → 86×192px
+  {id:"p1",sid:"9211464319231",name:"פח Calabria 33L לבן",price:479,img:CDN+"WhiteTrashCan33L.webp",cat:"פחי אשפה",w:86,h:192},
+  {id:"p2",sid:"9211464548607",name:"פח Calabria 33L שחור",price:479,img:CDN+"Design1600x1600.png",cat:"פחי אשפה",w:86,h:192},
+  {id:"p3",sid:"9211464614143",name:"פח Calabria 33L Stone",price:479,img:CDN+"KitchenTrashCan33L.webp",cat:"פחי אשפה",w:86,h:192},
+  {id:"p4",sid:"9211464745215",name:"פח Calabria 33L Space Gray",price:479,img:CDN+"3_04274940-b6bf-4c4f-b499-14da97d19f35.png",cat:"פחי אשפה",w:86,h:192},
+  {id:"p5",sid:"9211466678527",name:"פח Calabria 33L Urban Gray",price:479,img:CDN+"6_c31c91ad-64ce-4d5d-bdf9-651f5b0e5754.png",cat:"פחי אשפה",w:86,h:192},
+  {id:"p6",sid:"9211466744063",name:"פח Calabria 33L Taupe Pink",price:479,img:CDN+"4_ec661b1f-2827-48d0-8576-dbefc478140a.png",cat:"פחי אשפה",w:86,h:192},
+  {id:"p7",sid:"9211466776831",name:"פח Calabria 33L ירוק מרווה",price:479,img:CDN+"5_7b29bcec-8db8-40a3-8475-66972e8baff1.png",cat:"פחי אשפה",w:86,h:192},
+  // פח Calabria 53L: גובה 83.5cm, רוחב 28.5-32cm → 90×251px
+  {id:"p8",sid:"9211466907903",name:"פח Calabria 53L Dark Gray",price:599,img:CDN+"DarkGrayLegs.webp",cat:"פחי אשפה",w:90,h:251},
+  {id:"p9",sid:"9211466940671",name:"פח Calabria 53L Taupe Pink",price:599,img:CDN+"1_ad56761e-fc4a-46d2-a430-943d12fc61f4.png",cat:"פחי אשפה",w:90,h:251},
+  {id:"p10",sid:"9211466645759",name:"פח Calabria 53L Urban Gray",price:599,img:CDN+"3_7c8f74cf-0c37-4375-957b-2c61262e33c4.png",cat:"פחי אשפה",w:90,h:251},
+  // פח SMART 50L: גובה 61.1cm, רוחב 44cm → 132×183px
+  {id:"p11",sid:"9211465203967",name:"פח SMART חיישן 50L לבן",price:649,img:CDN+"SmartSensorTrashCan50LWhite.webp",cat:"פחי אשפה",w:132,h:183},
+  {id:"p12",sid:"9211465269503",name:"פח SMART חיישן 50L שחור",price:649,img:CDN+"77e3744c450e8391c5b5ccb50e60957f.webp",cat:"פחי אשפה",w:132,h:183},
+  // סירים OXFORD: מחבת 24cm + סיר 24cm — ~60cm רוחב כולל × ~35cm גובה → 180×105px
+  {id:"p13",sid:"9211464057087",name:"סט סירים OXFORD Pink",price:397,img:CDN+"5PieceSetPink.webp",cat:"סירים",w:180,h:105},
+  {id:"p14",sid:"9211464122623",name:"סט סירים OXFORD ירוק",price:397,img:CDN+"MintColor5PieceSet.webp",cat:"סירים",w:180,h:105},
+  {id:"p15",sid:"9211464155391",name:"סט סירים OXFORD Dark Gray",price:397,img:CDN+"5PieceSetDarkGray.webp",cat:"סירים",w:180,h:105},
+  {id:"p16",sid:"9211464220927",name:"סט סירים OXFORD תכלת",price:397,img:CDN+"5PieceSetTeal.webp",cat:"סירים",w:180,h:105},
+  // LUXEMBOURG 8 חלקים: מחבת 28cm + סיר 28cm → 200×115px
+  {id:"p17",sid:"9211464909055",name:"סט סירים LUXEMBOURG 8 חלקים",price:974,img:CDN+"Luxembourg_8_Piece_Set.webp",cat:"סירים",w:200,h:115},
+  // BERLIN 10 חלקים: סוטאז 28cm → 220×125px
+  {id:"p18",sid:"9211464974591",name:"סט סירים BERLIN 10 חלקים",price:1049,img:CDN+"BerlinCookwareSet10Pieces.webp",cat:"סירים",w:220,h:125},
+  {id:"p19",sid:"9211469496575",name:"סט סירים Oxford Sage Green",price:337,img:CDN+"Oxford_Sage_Green_Set.webp",cat:"סירים",w:180,h:105},
+  {id:"p20",sid:"9211469562111",name:"סט סירים Oxford Almond Rose",price:359,img:CDN+"Oxford_Almond_Rose_Set.webp",cat:"סירים",w:180,h:105},
+  // סוטאז' 28cm: ~56cm רוחב עם ידית × ~20cm גובה → 168×60px
+  {id:"p21",sid:"9211468251391",name:"סוטאז' Crown Stone 28 ס״מ",price:307,img:CDN+"Sotage36cmCrownStone.webp",cat:"סירים",w:168,h:60},
+  {id:"p22",sid:"9211468284159",name:"סוטאז' Crown Marsala 28 ס״מ",price:307,img:CDN+"Sotage36cmMarsala.webp",cat:"סירים",w:168,h:60},
+  {id:"p23",sid:"9211468316927",name:"סוטאז' Crown Slate Blue 28 ס״מ",price:307,img:CDN+"SotageBlue28cm.webp",cat:"סירים",w:168,h:60},
+  // FluffyPan: מחבת 26cm + ידית ~50cm כולל × ~10cm גובה → 150×65px
+  {id:"p24",sid:"9211467071743",name:"מחבת FluffyPan ורוד",price:147,img:CDN+"PinkPancakePan_1.webp",cat:"מטבח",w:150,h:65},
+  {id:"p25",sid:"9211467137279",name:"מחבת FluffyPan ירוק מרווה",price:147,img:CDN+"FluffyPanSageGreen.webp",cat:"מטבח",w:150,h:65},
+  {id:"p26",sid:"9211467170047",name:"מחבת FluffyPan Stone",price:147,img:CDN+"PancakeStonePan.webp",cat:"מטבח",w:150,h:65},
+  // מתקן ייבוש: ~50cm רוחב × ~30cm גובה → 150×90px
+  {id:"p27",sid:"9211465367807",name:"מתקן ייבוש כלים מתקפל",price:249,img:CDN+"FoldableDishDryingRack.webp",cat:"מטבח",w:150,h:90},
+  // מנורה בוהו: גובה 133cm, רוחב 29cm → 87×399px
+  {id:"p28",sid:"9211466121471",name:"מנורה דקורטיבית בוהו",price:399,img:CDN+"DecorativeWoodLamp.webp",cat:"עיצוב הבית",w:87,h:399},
+  // מנורת לילה: גובה 34cm, רוחב 20cm → 60×102px
+  {id:"p29",sid:"9211466154239",name:"מנורת לילה דקורטיבית",price:129,img:CDN+"DecorativeNightLamp.webp",cat:"עיצוב הבית",w:60,h:102},
+  // מגש שיש מלבני: ~45cm × ~30cm → 135×90px
+  {id:"p30",sid:"9211468054783",name:"מגש שיש מלבני ידיות זהב",price:187,img:CDN+"RectangularTraywithGoldHandles_1.webp",cat:"עיצוב הבית",w:135,h:90},
+  // מגש מסתובב: ~35cm קוטר → 105×105px
+  {id:"p31",sid:"9211468153087",name:"מגש שיש מסתובב 360°",price:254,img:CDN+"RotatingMarbleTray360.webp",cat:"עיצוב הבית",w:105,h:105},
+  // מדפים דקורטיביים: ~60cm × ~30cm → 180×90px
+  {id:"p32",sid:"9211466219775",name:"זוג מדפים דקורטיביים",price:229,img:CDN+"Decorative_Shelf_Pair.webp",cat:"אחסון",w:180,h:90},
+  // יחידת מדפים 4 קומות: 37x29x79cm → 111×237px
+  {id:"p33",sid:"9211466055935",name:"יחידת מדפים 4 קומות",price:319,img:CDN+"4-TierShelvingUnit.png",cat:"אחסון",w:111,h:237},
+  // יחידת מדפים פינתית: 31x31x79cm → 93×237px
+  {id:"p34",sid:"9211465990399",name:"יחידת מדפים פינתית",price:229,img:CDN+"CornerShelfUnit_3.webp",cat:"אחסון",w:93,h:237},
+  // שולחן צד: 46x46x53cm → 138×159px
+  {id:"p35",sid:"9211466252543",name:"שולחן צד עם מגש",price:269,img:CDN+"SideTablewithTray.webp",cat:"אחסון",w:138,h:159},
+  // עגלת במבוק 3 קומות: ~45cm × ~90cm → 135×270px
+  {id:"p36",sid:"9211467792639",name:"עגלת אחסון במבוק 3 קומות",price:479,img:CDN+"1_7269730f-9ec2-4c2b-a5db-263990ea9128.png",cat:"אחסון",w:135,h:270},
+  // עגלת מטבח במבוק: ~60cm × ~90cm → 180×270px
+  {id:"p37",sid:"9211467825407",name:"עגלת מטבח במבוק",price:769,img:CDN+"2_a529d771-3676-460d-8fc1-50de74b3b4d6.png",cat:"אחסון",w:180,h:270},
+  // מתקן כביסה Superior: 20מ' תלייה, ~120cm × ~160cm → 360×480px (גדול!)
+  {id:"p38",sid:"9211465924863",name:"מתקן כביסה Superior",price:399,img:CDN+"SuperiorLaundryRack.webp",cat:"כביסה",w:360,h:480},
+  // Casaflex Ultra: 112-200cm × 55cm → 180×165px (מקופל)
+  {id:"p39",sid:"9211465793791",name:"מתקן כביסה Casaflex Ultra",price:529,img:CDN+"CasaflexUltraWhiteClothesRack.webp",cat:"כביסה",w:360,h:480},
+  // שטיחים: 160×230cm סטנדרטי → 480×690px
+  {id:"r1",sid:"9221431460095",name:"שטיח Retro Grid",price:710,img:CDN+"Retro_Grid_600x600_dcd0a05f-3b8b-4db6-8709-ec5f5a60484f.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r2",sid:"9221440405759",name:"שטיח Dusty Nude Deluxe",price:410,img:CDN+"DustyNudeRug.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r3",sid:"9221440438527",name:"שטיח Forest Shadow Deluxe",price:410,img:CDN+"Forest_Shadow_Deluxe.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r4",sid:"9221440471295",name:"שטיח Rosetta Mist Deluxe",price:410,img:CDN+"RosettaMistRug.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r5",sid:"9221440504063",name:"שטיח Desert Royal Deluxe",price:410,img:CDN+"DesertRoyalRug.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r6",sid:"9221440536831",name:"שטיח Terra Red Deluxe",price:410,img:CDN+"TERRAREDRug.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r7",sid:"9221440569599",name:"שטיח Persian Garden Deluxe",price:410,img:CDN+"PersianGared.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r8",sid:"9221440602367",name:"שטיח Amber Night Deluxe",price:410,img:CDN+"AmberNight.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r9",sid:"9221440667903",name:"שטיח ילדים Looma Dots",price:410,img:CDN+"LoomaDotsDeluxeRug.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r10",sid:"9221440700671",name:"שטיח ילדים Tiny Travelers",price:410,img:CDN+"TinyTravelersDeluxe.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r11",sid:"9223531921663",name:"שטיח Venice אפור",price:349,img:CDN+"VeniceGrayRug.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r12",sid:"9223531954431",name:"שטיח Venice בז׳",price:349,img:CDN+"VeniceBeigeRug_2.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r13",sid:"9223531987199",name:"שטיח Baku Ivory",price:349,img:CDN+"Baku_Ivory_2.1.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r14",sid:"9223532019967",name:"שטיח Baku חום",price:349,img:CDN+"BakuSand2.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r15",sid:"9223532052735",name:"שטיח Kashan Blue",price:349,img:CDN+"KashanBlue5.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r16",sid:"9223532085503",name:"שטיח Kashan Gray",price:349,img:CDN+"KashanGray.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r17",sid:"9223532118271",name:"שטיח Damascus Deluxe",price:410,img:CDN+"1_e641b598-d46d-4617-9200-c3d9da397194.png",cat:"שטיחים",w:480,h:690},
+  {id:"r18",sid:"9223532151039",name:"שטיח Antique Torino",price:349,img:CDN+"AntiqueTorino4.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r19",sid:"9223532183807",name:"שטיח Royal Isfahan",price:349,img:CDN+"ImagefromBuonaCasa_3.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r20",sid:"9223532249343",name:"שטיח Marble Beige",price:349,img:CDN+"MarbleBeige4.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r21",sid:"9223532282111",name:"שטיח Marble Gray",price:349,img:CDN+"MarbleGray1.1.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r22",sid:"9223532314879",name:"שטיח Marrakesh",price:349,img:CDN+"ImagefromBuonaCasa.webp",cat:"שטיחים",w:480,h:690},
+  {id:"r23",sid:"9307913224447",name:"שטיח Shiraz Deluxe",price:410,img:CDN+"7_1d52645c-8a65-4a22-86c8-8d5ac755c98f.png",cat:"שטיחים",w:480,h:690},
+  {id:"r24",sid:"9394137235711",name:"שטיח Damka Canvas",price:410,img:CDN+"1_b283c4ce-ebd1-49d3-b1b2-988c325dfe45.png",cat:"שטיחים",w:480,h:690},
+  {id:"r25",sid:"9394144248063",name:"שטיח Jaffa Canvas",price:410,img:CDN+"2_b2b57d77-4e38-44aa-ba83-249d2151dc13.png",cat:"שטיחים",w:480,h:690},
 ];
 
 const PRESETS=[{label:"סלון",emoji:"🛋️",bg:"#F0ECE4"},{label:"מטבח",emoji:"🍳",bg:"#E8F0E9"},{label:"חדר שינה",emoji:"🛏️",bg:"#ECE8F0"},{label:"אמבטיה",emoji:"🚿",bg:"#E4ECF0"}];
@@ -558,7 +581,7 @@ function place(p,isMob){
   const cvs=document.getElementById('room-cvs');
   const rect=cvs.getBoundingClientRect();
   const scale=isMob?Math.min(1,rect.width/380)*1.1:1;
-  const item={id:S.ctr++,p,x:Math.round((rect.width-p.w*scale)/2),y:Math.round((rect.height-p.h*scale)/2),w:Math.round(p.w*scale),h:Math.round(p.h*scale),opacity:1,rot:0};
+  const item={id:S.ctr++,p,x:Math.round((rect.width-p.w*scale)/2),y:Math.round((rect.height-p.h*scale)/2),w:Math.round(p.w*scale),h:Math.round(p.h*scale),opacity:1,rot:0,flipped:false};
   S.items.push(item);S.selId=item.id;
   mountItem(item);updateCnts();updateHint();
   if(isMob)closeSheet();
@@ -576,7 +599,8 @@ function mountItem(item){
     <button class="item-del" onclick="removeItem(${item.id})" ontouchend="removeItem(${item.id})">✕</button>
     <div class="item-resize" data-id="${item.id}"></div>
     <button class="item-rot-l" onclick="rotItem(${item.id},-15)" ontouchend="rotItem(${item.id},-15)">↺</button>
-    <button class="item-rot-r" onclick="rotItem(${item.id},15)" ontouchend="rotItem(${item.id},15)">↻</button>`;
+    <button class="item-rot-r" onclick="rotItem(${item.id},15)" ontouchend="rotItem(${item.id},15)">↻</button>
+    <button class="item-flip" onclick="flipItem(${item.id})" ontouchend="flipItem(${item.id})">🔄</button>`;
   div.addEventListener('mousedown',e=>onItemDown(e,item.id));
   div.querySelector('.item-resize').addEventListener('mousedown',e=>onResizeDown(e,item.id));
   attachTouch(div,item.id);
@@ -598,7 +622,14 @@ function selectItem(id){deselectAll();S.selId=id;const el=document.getElementByI
 function rotItem(id,deg){
   const item=S.items.find(it=>it.id===id);if(!item)return;
   item.rot=(item.rot||0)+deg;
-  const el=document.getElementById(`item-${id}`);if(el)el.style.transform=`rotate(${item.rot}deg)`;
+  const el=document.getElementById(`item-${id}`);if(el)el.style.transform=`rotate(${item.rot}deg) scaleX(${item.flipped?-1:1})`;
+}
+
+function flipItem(id){
+  const item=S.items.find(it=>it.id===id);if(!item)return;
+  item.flipped=!item.flipped;
+  const el=document.getElementById(`item-${id}`);
+  if(el)el.style.transform=`rotate(${item.rot||0}deg) scaleX(${item.flipped?-1:1})`;
 }
 
 function onItemDown(e,id){
